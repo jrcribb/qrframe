@@ -29,11 +29,7 @@ export const RenderContext = createContext<{
   addCanvasRef: (ref: HTMLCanvasElement) => void;
 }>();
 
-export type RenderCanvas = (
-  qr: OutputQr,
-  params: Params,
-  ctx: CanvasRenderingContext2D
-) => void;
+export type RenderCanvas = (qr: OutputQr, params: Params, ctx: CanvasRenderingContext2D) => void;
 
 export type RenderSVG = (qr: OutputQr, params: Params) => string;
 
@@ -82,7 +78,7 @@ export function RenderContextProvider(props: { children: JSX.Element }) {
   // I could expose multiple versions of the set functions
   // but that seems much less maintainable that this
   createEffect(async () => {
-    if (output().err) return
+    if (output().err) return;
     const r = render();
 
     // Track store without leaking extra params
@@ -94,7 +90,7 @@ export function RenderContextProvider(props: { children: JSX.Element }) {
       // access to track
       params[key];
       if (Array.isArray(unwrapped[key])) {
-        params[key].forEach((_: any) => { });
+        params[key].forEach((_: any) => {});
       }
     });
 
@@ -105,10 +101,7 @@ export function RenderContextProvider(props: { children: JSX.Element }) {
     if (worker == null) setupWorker();
 
     const timeoutId = setTimeout(() => {
-      console.error(
-        `Preview took longer than 5 seconds, timed out!`,
-        timeoutId
-      );
+      console.error(`Preview took longer than 5 seconds, timed out!`, timeoutId);
       timeoutIdSet.delete(timeoutId);
       if (worker != null) {
         worker.terminate();
@@ -150,9 +143,7 @@ export function RenderContextProvider(props: { children: JSX.Element }) {
           canvasRefs.forEach((canvas) => {
             if (first == null) {
               first = canvas;
-              canvas
-                .getContext("bitmaprenderer")!
-                .transferFromImageBitmap(e.data.bitmap);
+              canvas.getContext("bitmaprenderer")!.transferFromImageBitmap(e.data.bitmap);
             } else {
               canvas.getContext("2d")!.drawImage(first, 0, 0);
             }

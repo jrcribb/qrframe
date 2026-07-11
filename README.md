@@ -123,7 +123,6 @@ This project is a tool to create designs! These are only examples!
   - Generated SVGs are not sanitized.
   - There is nothing to exploit/attack and no risk from bad code except crashing your tab.
 
-
 ## Creating a preset
 
 A preset must export `paramsSchema` and either `renderSVG` or `renderCanvas`

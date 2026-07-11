@@ -26,13 +26,13 @@ export function AllowPasteDialog(props: Props) {
             <div class="flex flex-col gap-2 mb-4 text-sm">
               <p>Using code you don't understand could be dangerous.</p>
               <p>
-                There are no secrets or passwords that can be leaked from this
-                website, but any number of things could happen. The page may
-                break, you could be redirected to another URL, or get absolutely
-                memed on.
+                There are no secrets or passwords that can be leaked from this website, but any
+                number of things could happen. The page may break, you could be redirected to
+                another URL, or get absolutely memed on.
               </p>
               <p>
-                In case you need to delete a preset without running its code, you can right click on it.
+                In case you need to delete a preset without running its code, you can right click on
+                it.
               </p>
               <p>Do you accept these risks?</p>
             </div>

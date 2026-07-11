@@ -74,14 +74,7 @@ export async function renderSVG(qr, params) {
   if (params["Frame"] === "Corners") {
     const bracketRadius = 2.2 * roundness;
     const bracketStraight = 5 + margin / 2 - bracketRadius;
-    svg += brackets(
-      -margin / 2,
-      -margin / 2,
-      size - margin,
-      bracketRadius,
-      bracketStraight,
-      fg
-    );
+    svg += brackets(-margin / 2, -margin / 2, size - margin, bracketRadius, bracketStraight, fg);
   }
 
   svg += `<path d="`;
@@ -138,13 +131,7 @@ export async function renderSVG(qr, params) {
           svg += `M${x + dataOffset},${y + dataOffset}h${dataSize}v${dataSize}h-${dataSize}z`;
         }
       } else {
-        svg += squircle(
-          x + dataOffset,
-          y + dataOffset,
-          dataSize,
-          dataRadius,
-          true
-        );
+        svg += squircle(x + dataOffset, y + dataOffset, dataSize, dataRadius, true);
       }
     }
   }
@@ -153,9 +140,7 @@ export async function renderSVG(qr, params) {
 
   if (file != null) {
     const bytes = new Uint8Array(await file.arrayBuffer());
-    const b64 = btoa(
-      Array.from(bytes, (byte) => String.fromCodePoint(byte)).join("")
-    );
+    const b64 = btoa(Array.from(bytes, (byte) => String.fromCodePoint(byte)).join(""));
     const logoSize = fmt(logoRatio * size);
     const logoOffset = fmt(((1 - logoRatio) * size) / 2 - margin);
     svg += `<image x="${logoOffset}" y="${logoOffset}" width="${logoSize}" height="${logoSize}" href="data:${file.type};base64,${b64}"/>`;

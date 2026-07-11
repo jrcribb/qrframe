@@ -1,9 +1,6 @@
 import type { Ecl, Mask } from "fuqr";
 import { useQrContext } from "~/lib/QrContext";
-import {
-  ENCODER_NAMES,
-  type EncoderName
-} from "~/lib/options";
+import { ENCODER_NAMES, type EncoderName } from "~/lib/options";
 import { ButtonGroup, ButtonGroupItem } from "../ButtonGroup";
 import { NumberInput } from "../NumberInput";
 import { Select } from "../Select";
@@ -24,9 +21,7 @@ export function Settings() {
       </div>
       <div>
         <div class="flex justify-between">
-          <div class="text-sm py-2">
-            {inputQr.exactVersion ? "Version" : "Min version"}
-          </div>
+          <div class="text-sm py-2">{inputQr.exactVersion ? "Version" : "Min version"}</div>
           <Switch
             label="Exact"
             value={inputQr.exactVersion}

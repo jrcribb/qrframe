@@ -54,10 +54,7 @@ export function SplitButton(props: Props) {
                 <FillButton class="w-full p-2" onClick={() => onPng(500, 500)}>
                   500x500
                 </FillButton>
-                <FillButton
-                  class="w-full p-2"
-                  onClick={() => onPng(1000, 1000)}
-                >
+                <FillButton class="w-full p-2" onClick={() => onPng(1000, 1000)}>
                   1000x1000
                 </FillButton>
               </div>
@@ -83,10 +80,7 @@ export function SplitButton(props: Props) {
                   setValue={setCustomHeight}
                 />
               </div>
-              <FillButton
-                class="w-full p-2"
-                onClick={() => onPng(customWidth(), customHeight())}
-              >
+              <FillButton class="w-full p-2" onClick={() => onPng(customWidth(), customHeight())}>
                 Download custom
               </FillButton>
             </div>
@@ -109,12 +103,7 @@ function MenuNumberInput(props: NumberProps) {
 
   const safeSetValue = (value: number) => {
     setRawValue(value);
-    if (
-      value < props.min ||
-      value > props.max ||
-      isNaN(value) ||
-      !Number.isInteger(value)
-    ) {
+    if (value < props.min || value > props.max || isNaN(value) || !Number.isInteger(value)) {
       return;
     }
 

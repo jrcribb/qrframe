@@ -21,8 +21,7 @@ export function ContextMenuProvider(props: Props) {
         >
           <ContextMenu.Item
             classList={{
-              "p-2 rounded select-none data-[highlighted]:(bg-fore-base/10 outline-none)":
-                true,
+              "p-2 rounded select-none data-[highlighted]:(bg-fore-base/10 outline-none)": true,
               "pointer-events-none opacity-50": props.disabled,
             }}
             onClick={props.onRename}
@@ -32,8 +31,7 @@ export function ContextMenuProvider(props: Props) {
           </ContextMenu.Item>
           <ContextMenu.Item
             classList={{
-              "p-2 rounded select-none data-[highlighted]:(bg-fore-base/10 outline-none)":
-                true,
+              "p-2 rounded select-none data-[highlighted]:(bg-fore-base/10 outline-none)": true,
               "pointer-events-none opacity-50": props.disabled,
             }}
             onClick={props.onDelete}

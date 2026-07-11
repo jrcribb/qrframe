@@ -67,8 +67,7 @@ export default function Temp() {
             <QrPreview
               ref={qrPreview!}
               classList={{
-                "top-0 flex flex-col gap-4 p-4 rounded-b-[1rem] border-b shadow-2xl bg-back-base z-10 [transition:top] md:(sticky flex-1 flex-grow-2 min-w-300px self-start py-8 border-none shadow-none)":
-                  true,
+                "top-0 flex flex-col gap-4 p-4 rounded-b-[1rem] border-b shadow-2xl bg-back-base z-10 [transition:top] md:(sticky flex-1 flex-grow-2 min-w-300px self-start py-8 border-none shadow-none)": true,
                 sticky: !textFocused(),
               }}
             />

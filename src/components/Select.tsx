@@ -31,9 +31,7 @@ export function Select(props: Props) {
         const index = props.options.indexOf(props.value);
         switch (e.key) {
           case "ArrowDown":
-            props.setValue(
-              props.options[Math.min(index + 1, props.options.length - 1)]
-            );
+            props.setValue(props.options[Math.min(index + 1, props.options.length - 1)]);
             break;
           case "ArrowUp":
             props.setValue(props.options[Math.max(index - 1, 0)]);
@@ -59,17 +57,15 @@ export function Select(props: Props) {
         >
           <KSelect.Label>{itemProps.item.rawValue}</KSelect.Label>
           <KSelect.ItemIndicator>
-            <FilledDot size={20} class="-me-1"/>
+            <FilledDot size={20} class="-me-1" />
           </KSelect.ItemIndicator>
         </KSelect.Item>
       )}
     >
       <KSelect.Trigger class="leading-tight w-full inline-flex justify-between items-center gap-1 rounded-md border pl-3 pr-2 py-2 focus:(outline-none ring-2 ring-fore-base ring-offset-2 ring-offset-back-base) bg-back-base hover:bg-fore-base/5">
-        <KSelect.Value>
-          {(state) => state.selectedOption() as string}
-        </KSelect.Value>
+        <KSelect.Value>{(state) => state.selectedOption() as string}</KSelect.Value>
         <KSelect.Icon>
-          <ChevronsUpDown size={16}/>
+          <ChevronsUpDown size={16} />
         </KSelect.Icon>
       </KSelect.Trigger>
       <KSelect.Portal>

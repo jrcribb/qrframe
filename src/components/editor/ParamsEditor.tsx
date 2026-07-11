@@ -46,7 +46,7 @@ export function ParamsEditor() {
   );
 }
 
-function ArrayParam({ label, other }: { label: string, other: any }) {
+function ArrayParam({ label, other }: { label: string; other: any }) {
   const { params, setParams } = useRenderContext();
 
   // 0 is falsey and not a valid key
@@ -84,9 +84,7 @@ function ArrayParam({ label, other }: { label: string, other: any }) {
           </FlatButton>
           <FlatButton
             class="p-1.5"
-            onClick={() =>
-              setParams(label, (prev: any[]) => [...prev, other.props.default])
-            }
+            onClick={() => setParams(label, (prev: any[]) => [...prev, other.props.default])}
           >
             <Plus />
           </FlatButton>
@@ -99,9 +97,7 @@ function ArrayParam({ label, other }: { label: string, other: any }) {
       >
         <DragDropSensors />
         <SortableProvider
-          ids={Array.from({ length: params[label].length }, (_, i) =>
-            idFromIndex(i)
-          )}
+          ids={Array.from({ length: params[label].length }, (_, i) => idFromIndex(i))}
         >
           <Index each={params[label]}>
             {(v, i) => {
@@ -121,18 +117,13 @@ function ArrayParam({ label, other }: { label: string, other: any }) {
                   >
                     <Dynamic
                       component={
-                        PARAM_COMPONENTS[
-                        other.props.type as keyof typeof PARAM_COMPONENTS
-                        ]
+                        PARAM_COMPONENTS[other.props.type as keyof typeof PARAM_COMPONENTS]
                       }
                       {...other.props}
                       value={v()}
                       setValue={(v: any) => setParams(label, i, v)}
                     />
-                    <div
-                      class="px-1 cursor-move touch-none"
-                      {...sortable.dragActivators}
-                    >
+                    <div class="px-1 cursor-move touch-none" {...sortable.dragActivators}>
                       <GripVertical />
                     </div>
                   </div>
@@ -145,11 +136,7 @@ function ArrayParam({ label, other }: { label: string, other: any }) {
           <div class="flex w-full justify-end items-center">
             <Show when={dragging()}>
               <Dynamic
-                component={
-                  PARAM_COMPONENTS[
-                  other.props.type as keyof typeof PARAM_COMPONENTS
-                  ]
-                }
+                component={PARAM_COMPONENTS[other.props.type as keyof typeof PARAM_COMPONENTS]}
                 {...other.props}
                 value={params[label][indexFromId(activeId()!)]}
                 test={true}

@@ -36,8 +36,7 @@ export const paramsSchema = {
 
 export function renderSVG(qr, params) {
   const rand = getSeededRand(params["Seed"]);
-  const range = (min, max) =>
-    Math.trunc(100 * (rand() * (max - min) + min)) / 100;
+  const range = (min, max) => Math.trunc(100 * (rand() * (max - min) + min)) / 100;
 
   const rowLen = qr.version * 4 + 17;
   const margin = params["Margin"];

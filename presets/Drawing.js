@@ -10,15 +10,7 @@ export const paramsSchema = {
   },
   "Fill style": {
     type: "select",
-    options: [
-      "Hachure",
-      "Solid",
-      "Zigzag",
-      "Cross-hatch",
-      "Dots",
-      "Dashed",
-      "Zigzag-line",
-    ],
+    options: ["Hachure", "Solid", "Zigzag", "Cross-hatch", "Dots", "Dashed", "Zigzag-line"],
     default: "Zigzag",
   },
   Fill: {

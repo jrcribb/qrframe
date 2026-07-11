@@ -40,14 +40,8 @@ export function QrPreview(props: Props) {
 }
 
 function RenderedQrCode() {
-  const {
-    render,
-    error,
-    svgParentRefs,
-    addSvgParentRef,
-    canvasRefs,
-    addCanvasRef,
-  } = useRenderContext();
+  const { render, error, svgParentRefs, addSvgParentRef, canvasRefs, addCanvasRef } =
+    useRenderContext();
 
   let i = svgParentRefs.length;
   let j = canvasRefs.length;
@@ -100,9 +94,7 @@ function Metadata(props: MetadataProps) {
           </div>
           <div class="">
             Error tolerance{" "}
-            <div class="font-bold text-base whitespace-pre">
-              ({ECL_LABELS[output().qr!.ecl]})
-            </div>
+            <div class="font-bold text-base whitespace-pre">({ECL_LABELS[output().qr!.ecl]})</div>
           </div>
         </div>
       </Show>
@@ -153,7 +145,7 @@ function DownloadButtons() {
       const url = URL.createObjectURL(
         new Blob([svgParentRefs[0].innerHTML], {
           type: "image/svg+xml",
-        })
+        }),
       );
       const img = new Image();
       img.src = url;
@@ -162,16 +154,14 @@ function DownloadButtons() {
       URL.revokeObjectURL(url);
     }
 
-    return new Promise((resolve) =>
-      outCanvas.toBlob(resolve)
-    ) as Promise<Blob | null>;
+    return new Promise((resolve) => outCanvas.toBlob(resolve)) as Promise<Blob | null>;
   };
 
   const downloadSvg = async () => {
     const url = URL.createObjectURL(
       new Blob([svgParentRefs[0].innerHTML], {
         type: "image/svg+xml",
-      })
+      }),
     );
     download(url, `${filename()}.svg`);
     URL.revokeObjectURL(url);
@@ -187,10 +177,9 @@ function DownloadButtons() {
       };
       if (render()?.type === "svg") {
         // The mimetype of "image/svg+xml" is not able to be written to clipboard, but apps like Figma accept "text/plain" SVG data
-        clipboardData["text/plain"] = new Blob(
-          [svgParentRefs[0].innerHTML],
-          { type: "text/plain" }
-        );
+        clipboardData["text/plain"] = new Blob([svgParentRefs[0].innerHTML], {
+          type: "text/plain",
+        });
       }
 
       await navigator.clipboard.write([new ClipboardItem(clipboardData)]);
@@ -198,14 +187,11 @@ function DownloadButtons() {
       toastSuccess("Copied to clipboard");
     } catch (e) {
       setCopyState("error");
-      toastError(
-        "Failed to copy",
-        typeof e === "string" ? e : "Clipboard write failed"
-      );
+      toastError("Failed to copy", typeof e === "string" ? e : "Clipboard write failed");
     }
     clearTimeout(copyResetTimeout);
     copyResetTimeout = window.setTimeout(() => setCopyState("idle"), 1500);
-  }
+  };
 
   return (
     <div class="flex gap-2 md:(grid grid-cols-[1fr_1fr_auto])">
@@ -261,10 +247,7 @@ function DownloadButtons() {
             blob = await pngBlob(0, 0);
             if (blob == null) throw "toBlob returned null";
           } catch (e) {
-            toastError(
-              "Failed to create image",
-              typeof e === "string" ? e : "pngBlob failed"
-            );
+            toastError("Failed to create image", typeof e === "string" ? e : "pngBlob failed");
             return;
           }
           try {
@@ -281,10 +264,7 @@ function DownloadButtons() {
             navigator.share(shareData);
           } catch (e) {
             console.log(e);
-            toastError(
-              "Native sharing failed",
-              "File sharing not supported by browser"
-            );
+            toastError("Native sharing failed", "File sharing not supported by browser");
           }
         }}
       >

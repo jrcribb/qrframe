@@ -4,10 +4,7 @@ import { historyKeymap, indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
 import { syntaxHighlighting } from "@codemirror/language";
 import { Compartment, EditorState } from "@codemirror/state";
-import {
-  oneDarkHighlightStyle,
-  oneDarkTheme,
-} from "@codemirror/theme-one-dark";
+import { oneDarkHighlightStyle, oneDarkTheme } from "@codemirror/theme-one-dark";
 import { EditorView, keymap, type ViewUpdate } from "@codemirror/view";
 import { vim } from "@replit/codemirror-vim";
 import { basicSetup } from "codemirror";
@@ -87,7 +84,7 @@ export function CodeEditor(props: Props) {
         // if (!u.docChanged) return;
         const newDirty = u.state.doc.toString() !== props.initialValue;
         setDirty(newDirty);
-      }, 300)
+      }, 300),
     ),
   ];
 
@@ -123,7 +120,7 @@ export function CodeEditor(props: Props) {
           head: 0,
           anchor: 0,
         },
-      })
+      }),
     );
 
     const currVimMode = untrack(vimMode);
@@ -174,9 +171,7 @@ export function CodeEditor(props: Props) {
         </label>
         <Button
           disabled={!dirty()}
-          onMouseDown={() =>
-            props.onSave(view.state.doc.toString(), updateThumbnail())
-          }
+          onMouseDown={() => props.onSave(view.state.doc.toString(), updateThumbnail())}
           class="bg-green-700 border rounded-md hover:bg-green-700/90 focus-visible:(outline-none ring-2 ring-fore-base ring-offset-2 ring-offset-back-base) disabled:(bg-transparent text-fore-base pointer-events-none opacity-50) transition-colors px-3 py-1 min-w-150px"
         >
           {dirty() ? "Save" : "No changes"}
