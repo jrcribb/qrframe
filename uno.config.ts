@@ -1,7 +1,19 @@
-import { defineConfig } from "unocss";
 import transformerVariantGroup from "@unocss/transformer-variant-group";
+import { defineConfig } from "unocss";
+
 export default defineConfig({
-  blocklist: ["m55", "resize"],
+  blocklist: [
+    "resize",
+    // disable overzealous shorthands
+    // any two letters (mx, my, pt, ...).
+    /^[a-z]{2}$/,
+    // any letter followed by number (m4, w100, z10)
+    /^[a-z]\d/,
+  ],
+  content: {
+    // entry-server.tsx not in client module graph
+    filesystem: ["src/entry-server.tsx"],
+  },
   transformers: [transformerVariantGroup()],
   theme: {
     colors: {

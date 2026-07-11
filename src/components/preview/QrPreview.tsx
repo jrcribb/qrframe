@@ -4,15 +4,9 @@ import Download from "lucide-solid/icons/download";
 import Share2 from "lucide-solid/icons/share-2";
 import X from "lucide-solid/icons/x";
 import { createSignal, Match, onCleanup, Show, Switch, type JSX } from "solid-js";
-import { QrState, useQrContext } from "~/lib/QrContext";
+import { useQrContext } from "~/lib/QrContext";
 import { useRenderContext } from "~/lib/RenderContext";
-import {
-  ECL_LABELS,
-  ECL_NAMES,
-  MASK_KEY,
-  MODE_KEY,
-  MODE_NAMES,
-} from "~/lib/options";
+import { ECL_LABELS } from "~/lib/options";
 import { FlatButton } from "../Button";
 import { toastError, toastSuccess } from "../ErrorToasts";
 import { SplitButton } from "../SplitButton";
@@ -23,42 +17,16 @@ type Props = {
 };
 
 export function QrPreview(props: Props) {
-  const { inputQr, output } = useQrContext();
+  const { output } = useQrContext();
 
   return (
     <div classList={props.classList} ref={props.ref}>
       <div class="max-w-[300px] md:max-w-full w-full self-center">
         <Show
-          when={output().state === QrState.Ready}
+          when={!output().err}
           fallback={
             <div class="checkerboard aspect-[1/1] border rounded-md p-2 text-black">
-              <Switch>
-                <Match when={output().state === QrState.Loading}>
-                  <svg
-                    viewBox="-12 -12 48 48"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z">
-                      <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        dur="0.75s"
-                        values="0 12 12;360 12 12"
-                        repeatCount="indefinite"
-                      />
-                    </path>
-                  </svg>
-                </Match>
-                <Match when={output().state === QrState.ExceedsMaxCapacity}>
-                  Data exceeds max capacity
-                </Match>
-                <Match when={output().state === QrState.InvalidEncoding}>
-                  {`Input cannot be encoded in ${
-                    // @ts-expect-error props.mode not null b/c InvalidEncoding requires mode
-                    MODE_NAMES[inputQr.mode + 1]
-                  } mode`}
-                </Match>
-              </Switch>
+              {output().err!.message}
             </div>
           }
         >
@@ -120,8 +88,8 @@ function Metadata(props: MetadataProps) {
   const { output } = useQrContext();
   return (
     <div class={props.class}>
-      <div class="font-bold text-sm pb-2">QR Metadata</div>
-      <Show when={output().state === QrState.Ready}>
+      <Show when={!output().err}>
+        <div class="font-bold text-sm pb-2">QR Metadata</div>
         <div class="grid grid-cols-2 gap-2 text-sm">
           <div class="">
             Version
@@ -133,20 +101,8 @@ function Metadata(props: MetadataProps) {
           <div class="">
             Error tolerance{" "}
             <div class="font-bold text-base whitespace-pre">
-              {ECL_NAMES[output().qr!.ecl]} ({ECL_LABELS[output().qr!.ecl]})
+              ({ECL_LABELS[output().qr!.ecl]})
             </div>
-          </div>
-          <div class="">
-            Mask{" "}
-            <span class="font-bold text-base">
-              {MASK_KEY[output().qr!.mask]}
-            </span>
-          </div>
-          <div class="">
-            Encoding{" "}
-            <span class="font-bold text-base">
-              {MODE_KEY[output().qr!.mode]}
-            </span>
           </div>
         </div>
       </Show>
@@ -158,11 +114,10 @@ function DownloadButtons() {
   const { output } = useQrContext();
   const { render, svgParentRefs, canvasRefs } = useRenderContext();
   const [copyState, setCopyState] = createSignal<"idle" | "success" | "error">("idle");
-  const filename = () => output().qr!.text.slice(0, 32);
-  const disabled = () => output().state !== QrState.Ready;
+  const filename = () => output().text.slice(0, 32);
   let copyResetTimeout: number | undefined;
 
-  const pngBlob = async (resizeWidth, resizeHeight) => {
+  const pngBlob = async (resizeWidth: number, resizeHeight: number) => {
     // roughly 20px per module, ranges from 500 to 3620px
     const minWidth = (output().qr!.version * 4 + 17 + 4) * 20;
 
@@ -255,7 +210,7 @@ function DownloadButtons() {
   return (
     <div class="flex gap-2 md:(grid grid-cols-[1fr_1fr_auto])">
       <SplitButton
-        disabled={disabled()}
+        disabled={!!output().err}
         onPng={async (resizeWidth, resizeHeight) => {
           try {
             const blob = await pngBlob(resizeWidth, resizeHeight);
@@ -274,7 +229,7 @@ function DownloadButtons() {
       <Show when={render()?.type === "svg"}>
         <FlatButton
           class="hidden md:inline-flex flex-1 justify-center items-center gap-1 px-3 py-2"
-          disabled={disabled()}
+          disabled={!!output().err}
           onClick={downloadSvg}
         >
           <Download size={20} />
@@ -283,7 +238,7 @@ function DownloadButtons() {
       </Show>
       <FlatButton
         class="inline-flex justify-center items-center px-3 py-2"
-        disabled={disabled()}
+        disabled={!!output().err}
         title="Copy to clipboard"
         onClick={copyToClipboard}
       >
@@ -298,7 +253,7 @@ function DownloadButtons() {
       </FlatButton>
       <FlatButton
         class="md:hidden justify-center items-center px-3 py-2"
-        disabled={disabled()}
+        disabled={!!output().err}
         title="Share"
         onClick={async () => {
           let blob;

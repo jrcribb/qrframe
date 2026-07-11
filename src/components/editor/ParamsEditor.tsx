@@ -7,6 +7,7 @@ import {
   SortableProvider,
   transformStyle,
   useDragDropContext,
+  type DragEvent,
 } from "@thisbeyond/solid-dnd";
 import GripVertical from "lucide-solid/icons/grip-vertical";
 import Minus from "lucide-solid/icons/minus";
@@ -45,22 +46,22 @@ export function ParamsEditor() {
   );
 }
 
-function ArrayParam({ label, other }) {
+function ArrayParam({ label, other }: { label: string, other: any }) {
   const { params, setParams } = useRenderContext();
 
   // 0 is falsey and not a valid key
-  const idFromIndex = (i) => i + 1;
-  const indexFromId = (k) => k - 1;
-  const [activeId, setActiveId] = createSignal(null);
+  const idFromIndex = (i: number) => i + 1;
+  const indexFromId = (k: number) => k - 1;
+  const [activeId, setActiveId] = createSignal<number | null>(null);
   const [dragging, setDragging] = createSignal(false);
 
-  const onDragStart = ({ draggable }) => {
-    setActiveId(draggable.id);
+  const onDragStart = ({ draggable }: DragEvent) => {
+    setActiveId(draggable.id as number);
     setDragging(true);
   };
-  const onDragEnd = ({ draggable, droppable }) => {
-    const fromIndex = indexFromId(draggable.id);
-    const toIndex = indexFromId(droppable.id);
+  const onDragEnd = ({ draggable, droppable }: DragEvent) => {
+    const fromIndex = indexFromId(draggable.id as number);
+    const toIndex = indexFromId(droppable!.id as number);
     if (fromIndex !== toIndex) {
       setParams(label, (prev: any[]) => {
         const updatedItems = prev.slice();
@@ -93,7 +94,6 @@ function ArrayParam({ label, other }) {
       </div>
       <DragDropProvider
         onDragStart={onDragStart}
-        // @ts-expect-error droppable always exists
         onDragEnd={onDragEnd}
         collisionDetector={closestCenter}
       >
@@ -122,7 +122,7 @@ function ArrayParam({ label, other }) {
                     <Dynamic
                       component={
                         PARAM_COMPONENTS[
-                          other.props.type as keyof typeof PARAM_COMPONENTS
+                        other.props.type as keyof typeof PARAM_COMPONENTS
                         ]
                       }
                       {...other.props}
@@ -147,7 +147,7 @@ function ArrayParam({ label, other }) {
               <Dynamic
                 component={
                   PARAM_COMPONENTS[
-                    other.props.type as keyof typeof PARAM_COMPONENTS
+                  other.props.type as keyof typeof PARAM_COMPONENTS
                   ]
                 }
                 {...other.props}

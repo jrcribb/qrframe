@@ -7,7 +7,7 @@ import { createSignal } from "solid-js";
 import { FillButton } from "./Button";
 
 type Props = {
-  onPng: (resizeWidth, resizeHeight) => void;
+  onPng: (resizeWidth: number, resizeHeight: number) => void;
   onSvg: () => void;
   disabled: boolean;
 };
@@ -15,7 +15,7 @@ export function SplitButton(props: Props) {
   const [customWidth, setCustomWidth] = createSignal(2000);
   const [customHeight, setCustomHeight] = createSignal(2000);
 
-  const onPng = (resizeWidth, resizeHeight) => {
+  const onPng = (resizeWidth: number, resizeHeight: number) => {
     props.onPng(resizeWidth, resizeHeight);
     setOpen(false);
   };
@@ -107,7 +107,7 @@ type NumberProps = {
 function MenuNumberInput(props: NumberProps) {
   const [rawValue, setRawValue] = createSignal(props.value);
 
-  const safeSetValue = (value) => {
+  const safeSetValue = (value: number) => {
     setRawValue(value);
     if (
       value < props.min ||

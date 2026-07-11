@@ -1,16 +1,16 @@
 import { createEffect, createSignal, onMount, untrack } from "solid-js";
 
-import { basicSetup } from "codemirror";
 import { historyKeymap, indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
 import { syntaxHighlighting } from "@codemirror/language";
 import { Compartment, EditorState } from "@codemirror/state";
-import { EditorView, keymap, type ViewUpdate } from "@codemirror/view";
 import {
   oneDarkHighlightStyle,
   oneDarkTheme,
 } from "@codemirror/theme-one-dark";
+import { EditorView, keymap, type ViewUpdate } from "@codemirror/view";
 import { vim } from "@replit/codemirror-vim";
+import { basicSetup } from "codemirror";
 
 import { Button } from "@kobalte/core/button";
 import { debounce } from "~/lib/util";
@@ -28,7 +28,7 @@ export function CodeEditor(props: Props) {
   let parent!: HTMLDivElement;
   let view: EditorView;
   let modeComp = new Compartment();
-  let allowPaste;
+  let allowPaste: boolean;
 
   const [vimMode, _setVimMode] = createSignal(false);
   const setVimMode = (v: boolean) => {

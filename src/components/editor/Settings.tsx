@@ -1,14 +1,8 @@
-import { For } from "solid-js";
+import type { Ecl, Mask } from "fuqr";
 import { useQrContext } from "~/lib/QrContext";
 import {
-  ECL_NAMES,
-  ECL_VALUE,
-  MASK_KEY,
-  MASK_NAMES,
-  MASK_VALUE,
-  MODE_KEY,
-  MODE_NAMES,
-  MODE_VALUE,
+  ENCODER_NAMES,
+  type EncoderName
 } from "~/lib/options";
 import { ButtonGroup, ButtonGroupItem } from "../ButtonGroup";
 import { NumberInput } from "../NumberInput";
@@ -21,22 +15,22 @@ export function Settings() {
   return (
     <div class="flex flex-col gap-2 py-4">
       <div class="flex justify-between">
-        <div class="text-sm py-2">Encoding mode</div>
+        <div class="text-sm py-2">Encoder</div>
         <Select
-          options={MODE_NAMES}
-          value={MODE_KEY[inputQr.mode!]}
-          setValue={(name) => setInputQr("mode", MODE_VALUE[name])}
+          options={ENCODER_NAMES}
+          value={inputQr.encoder}
+          setValue={(name) => setInputQr("encoder", name as EncoderName)}
         />
       </div>
-      <div class="">
+      <div>
         <div class="flex justify-between">
           <div class="text-sm py-2">
-            {inputQr.strictVersion ? "Version" : "Min version"}
+            {inputQr.exactVersion ? "Version" : "Min version"}
           </div>
           <Switch
-            label="Strict"
-            value={inputQr.strictVersion}
-            setValue={(v) => setInputQr("strictVersion", v)}
+            label="Exact"
+            value={inputQr.exactVersion}
+            setValue={(v) => setInputQr("exactVersion", v)}
           />
         </div>
         <NumberInput
@@ -49,34 +43,38 @@ export function Settings() {
       <div>
         <div class="flex justify-between">
           <div class="text-sm py-2">
-            {inputQr.strictEcl ? "Error tolerance" : "Min error tolerance"}
+            {inputQr.exactEcl ? "Error tolerance" : "Min error tolerance"}
           </div>
           <Switch
-            label="Strict"
-            value={inputQr.strictEcl}
-            setValue={(v) => setInputQr("strictEcl", v)}
+            label="Exact"
+            value={inputQr.exactEcl}
+            setValue={(v) => setInputQr("exactEcl", v)}
           />
         </div>
         <ButtonGroup
-          value={ECL_NAMES[inputQr.minEcl]}
-          setValue={(v) => setInputQr("minEcl", ECL_VALUE[v])}
+          value={inputQr.minEcl.toString()}
+          setValue={(v) => setInputQr("minEcl", parseInt(v) as Ecl)}
         >
-          <For each={ECL_NAMES}>
-            {(name) => <ButtonGroupItem value={name}>{name}</ButtonGroupItem>}
-          </For>
+          <ButtonGroupItem value="0">7%</ButtonGroupItem>
+          <ButtonGroupItem value="1">15%</ButtonGroupItem>
+          <ButtonGroupItem value="2">25%</ButtonGroupItem>
+          <ButtonGroupItem value="3">30%</ButtonGroupItem>
         </ButtonGroup>
       </div>
       <div>
         <div class="text-sm py-2">Mask pattern</div>
         <ButtonGroup
-          value={MASK_KEY[inputQr.mask!]}
-          setValue={(name) => setInputQr("mask", MASK_VALUE[name])}
+          value={inputQr.mask.toString()}
+          setValue={(name) => setInputQr("mask", parseInt(name) as Mask)}
         >
-          <For each={MASK_NAMES}>
-            {(value) => (
-              <ButtonGroupItem value={value}>{value}</ButtonGroupItem>
-            )}
-          </For>
+          <ButtonGroupItem value="0">0</ButtonGroupItem>
+          <ButtonGroupItem value="1">1</ButtonGroupItem>
+          <ButtonGroupItem value="2">2</ButtonGroupItem>
+          <ButtonGroupItem value="3">3</ButtonGroupItem>
+          <ButtonGroupItem value="4">4</ButtonGroupItem>
+          <ButtonGroupItem value="5">5</ButtonGroupItem>
+          <ButtonGroupItem value="6">6</ButtonGroupItem>
+          <ButtonGroupItem value="7">7</ButtonGroupItem>
         </ButtonGroup>
       </div>
     </div>

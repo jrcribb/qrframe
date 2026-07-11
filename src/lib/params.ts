@@ -125,7 +125,7 @@ function parseField(value: any) {
         () => value.props.default
       );
     } else {
-      value.default = PARAM_DEFAULTS[value.type];
+      value.default = PARAM_DEFAULTS[value.type as keyof typeof PARAM_DEFAULTS];
     }
   }
 

@@ -1,68 +1,56 @@
 import {
+  ByteEncoder,
+  FuqrError,
+  Mask,
+  generateWithEncoder,
+  type Ecl
+} from "fuqr";
+import { AlphanumericEncoder, MixedEncoder, NumericEncoder } from "fuqr/extras/encoders";
+import {
   createContext,
   createMemo,
-  createSignal,
   useContext,
   type Accessor,
-  type JSX,
+  type JSX
 } from "solid-js";
-import init, {
-  ECL,
-  Mode,
-  Mask,
-  QrError,
-  QrOptions,
-  Version,
-  generate,
-} from "fuqr";
 import { createStore, type SetStoreFunction } from "solid-js/store";
-import { isServer } from "solid-js/web";
+import type { EncoderName } from "./options";
 
 type InputQr = {
   text: string;
   minVersion: number;
-  strictVersion: boolean;
-  minEcl: ECL;
-  strictEcl: boolean;
-  mode: Mode | null;
-  mask: Mask | null;
+  exactVersion: boolean;
+  minEcl: Ecl;
+  exactEcl: boolean;
+  encoder: EncoderName;
+  mask: Mask;
 };
 
 export type OutputQr = Readonly<{
   text: string;
   version: number;
-  ecl: ECL;
-  mode: Mode;
+  ecl: Ecl;
   mask: Mask;
   matrix: Uint8Array;
 }>;
 
 type Output =
   | {
-      state: QrState.Ready;
-      qr: Readonly<{
-        text: string;
-        version: number;
-        ecl: ECL;
-        mode: Mode;
-        mask: Mask;
-        matrix: Uint8Array;
-      }>;
-    }
-  | {
-      state:
-        | QrState.Loading
-        | QrState.InvalidEncoding
-        | QrState.ExceedsMaxCapacity;
-      qr: null;
+    text: string,
+    qr: {
+      version: number;
+      ecl: Ecl;
+      mask: Mask;
+      matrix: Uint8Array;
     };
+    err: null;
+  }
+  | {
+    text: string,
+    qr: null,
+    err: FuqrError;
+  };
 
-export enum QrState {
-  InvalidEncoding = QrError.InvalidEncoding,
-  ExceedsMaxCapacity = QrError.ExceedsMaxCapacity,
-  Loading = 2,
-  Ready = 3,
-}
 
 export const QrContext = createContext<{
   inputQr: InputQr;
@@ -74,51 +62,59 @@ export function QrContextProvider(props: { children: JSX.Element }) {
   const [inputQr, setInputQr] = createStore<InputQr>({
     text: "https://qrframe.kylezhe.ng",
     minVersion: 1,
-    strictVersion: false,
-    minEcl: ECL.Low,
-    strictEcl: false,
-    mode: null,
-    mask: null,
+    exactVersion: false,
+    minEcl: 0,
+    exactEcl: false,
+    encoder: "Optimizing",
+    mask: 2,
   });
 
-  const [initDone, setInitDone] = createSignal(false);
-
-  if (!isServer) {
-    init().then(() => {
-      setInitDone(true);
-    });
-  }
-
   const output = createMemo(() => {
-    if (!initDone()) {
-      return {
-        state: QrState.Loading,
-        qr: null,
-      };
-    }
-
     try {
-      // NOTE: WASM ptrs (QrOptions, Version) become null after leaving scope
-      const qrOptions = new QrOptions()
-        .min_version(new Version(inputQr.minVersion))
-        .strict_version(inputQr.strictVersion)
-        .min_ecl(inputQr.minEcl)
-        .strict_ecl(inputQr.strictEcl)
-        .mask(inputQr.mask!) // null instead of undefined (wasm-pack type)
-        .mode(inputQr.mode!); // null instead of undefined (wasm-pack type)
-
+      let encoder
+      switch (inputQr.encoder) {
+        case "Byte":
+          encoder = new ByteEncoder(inputQr.text)
+          break;
+        case "Numeric":
+          for (let i = 0; i < inputQr.text.length; i++) {
+            const byte = inputQr.text.charCodeAt(i)
+            if (byte < 0x30 || 0x39 < byte) {
+              throw new FuqrError("INVALID_ENCODING", `Content is not numeric`)
+            }
+          }
+          encoder = new NumericEncoder(inputQr.text)
+          break;
+        case "Alphanumeric":
+          for (let i = 0; i < inputQr.text.length; i++) {
+            const byte = inputQr.text.charCodeAt(i)
+            if (AlphanumericEncoder.byteToB45(byte) === 255) {
+              throw new FuqrError("INVALID_ENCODING", `Content is not alphanumeric`)
+            }
+          }
+          encoder = new AlphanumericEncoder(inputQr.text)
+          break;
+        default:
+          encoder = new MixedEncoder(inputQr.text)
+      }
+      const qr = generateWithEncoder(encoder, {
+        minVersion: inputQr.minVersion,
+        maxVersion: inputQr.exactVersion ? inputQr.minVersion : 40,
+        minEcl: inputQr.minEcl,
+        maxEcl: inputQr.exactEcl ? inputQr.minEcl : 3,
+        mask: inputQr.mask,
+      })
       return {
-        state: QrState.Ready,
-        qr: {
-          text: inputQr.text,
-          ...generate(inputQr.text, qrOptions),
-        },
-      };
+        text: inputQr.text,
+        qr,
+        err: null,
+      }
     } catch (e) {
       return {
-        state: e as QrState,
+        text: inputQr.text,
         qr: null,
-      };
+        err: e as FuqrError,
+      }
     }
   });
 

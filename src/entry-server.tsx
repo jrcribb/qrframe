@@ -16,7 +16,7 @@ export default createHandler(() => (
           />
           {assets}
         </head>
-        <body class="bg-back-base text-fore-base [--un-default-border-color:fg-subtle]">
+        <body class="bg-back-base text-fore-base">
           <div id="app">{children}</div>
           {scripts}
         </body>

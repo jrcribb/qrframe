@@ -25,10 +25,10 @@ import { FillButton, FlatButton } from "../Button";
 import { Collapsible } from "../Collapsible";
 import { ContentMenuTrigger, ContextMenuProvider } from "../ContextMenu";
 import { ControlledDialog, DialogButton } from "../Dialog";
+import { Switch } from "../Switch";
 import { TextInput, TextareaInput } from "../TextInput";
 import { ParamsEditor } from "./ParamsEditor";
 import { Settings } from "./Settings";
-import { Switch } from "../Switch";
 
 const CodeEditor = lazy(() => {
   return import("./CodeEditor").then((module) => ({
@@ -82,7 +82,7 @@ export function Editor(props: Props) {
   const [dialogKey, setDialogKey] = createSignal<string>("");
 
   let thumbWorker: Worker | null = null;
-  const timeoutIdMap = new Map<NodeJS.Timeout, string>();
+  const timeoutIdMap = new Map<number, string>();
 
   onMount(async () => {
     async function updatePresetThumbnail(key: keyof typeof PRESET_CODE) {
