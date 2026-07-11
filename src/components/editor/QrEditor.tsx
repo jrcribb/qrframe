@@ -36,8 +36,6 @@ const CodeEditor = lazy(() => {
   }));
 });
 
-import "virtual:blob-rewriter";
-
 type Props = {
   class?: string;
   onTextFocus: () => void;
@@ -154,7 +152,15 @@ export function Editor(props: Props) {
   };
 
   const importCode = async (code: string) => {
-    const blob = new Blob([code], { type: "text/javascript" });
+    // replace import with aabsolute url
+    // importmap doesn't work in web worker
+    const utilsUrl = new URL("/utils.js", location.origin).href;
+    const resolvedCode = code.replace(
+      /(\bfrom\s*["'])qrframe(["'])/g,
+      `$1${utilsUrl}$2`
+    );
+
+    const blob = new Blob([resolvedCode], { type: "text/javascript" });
     // This url is cleaned up in trySetCode()
     const url = URL.createObjectURL(blob);
 

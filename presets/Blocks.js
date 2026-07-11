@@ -1,6 +1,6 @@
 // Based on QRBTF's DSJ style
 // https://github.com/CPunisher/react-qrbtf/blob/master/src/components/QRDsj.tsx
-import { Module } from "https://qrframe.kylezhe.ng/utils.js";
+import { Module } from "qrframe";
 
 export const paramsSchema = {
   Margin: {
