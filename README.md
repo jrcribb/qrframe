@@ -220,3 +220,7 @@ pnpm run build
 ```
 
 The static files are available in `.output/public`
+
+Serving under a nonroot path is broken until https://github.com/solidjs/solid-start/pull/2152 is merged and released.
+
+Once fixed update `@solidjs/vite-plugin-nitro-2` and modify `base` in `vite.config.ts`.

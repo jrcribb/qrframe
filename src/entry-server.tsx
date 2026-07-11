@@ -8,7 +8,7 @@ export default createHandler(() => (
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.svg" />
+          <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} />
           <title>qrframe - a code based QR code designer</title>
           <meta
             name="description"

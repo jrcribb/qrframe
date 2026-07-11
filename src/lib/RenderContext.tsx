@@ -125,7 +125,7 @@ export function RenderContextProvider(props: { children: JSX.Element }) {
   });
 
   const setupWorker = () => {
-    worker = new Worker("previewWorker.js", { type: "module" });
+    worker = new Worker(`${import.meta.env.BASE_URL}previewWorker.js`, { type: "module" });
 
     worker.onmessage = (e) => {
       clearTimeout(e.data.timeoutId);

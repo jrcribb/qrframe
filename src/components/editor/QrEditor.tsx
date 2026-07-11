@@ -127,7 +127,7 @@ export function Editor(props: Props) {
   const importCode = async (code: string) => {
     // replace import with aabsolute url
     // importmap doesn't work in web worker
-    const utilsUrl = new URL("/utils.js", location.origin).href;
+    const utilsUrl = new URL(`${import.meta.env.BASE_URL}utils.js`, location.origin).href;
     const resolvedCode = code.replace(/(\bfrom\s*["'])qrframe(["'])/g, `$1${utilsUrl}$2`);
 
     const blob = new Blob([resolvedCode], { type: "text/javascript" });
@@ -222,7 +222,7 @@ export function Editor(props: Props) {
 
   const setupThumbWorker = () => {
     console.log("Starting thumbnailWorker");
-    thumbWorker = new Worker("thumbnailWorker.js", { type: "module" });
+    thumbWorker = new Worker(`${import.meta.env.BASE_URL}thumbnailWorker.js`, { type: "module" });
 
     thumbWorker.onmessage = (e) => {
       clearTimeout(e.data.timeoutId);
