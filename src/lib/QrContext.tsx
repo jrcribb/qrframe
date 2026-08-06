@@ -1,5 +1,5 @@
 import { ByteEncoder, FuqrError, Mask, generateWithEncoder, type Ecl } from "fuqr";
-import { AlphanumericEncoder, MixedEncoder, NumericEncoder } from "fuqr/extras/encoders";
+import { AlphanumericEncoder, NumericEncoder } from "fuqr/extras/encoders";
 import { createContext, createMemo, useContext, type Accessor, type JSX } from "solid-js";
 import { createStore, type SetStoreFunction } from "solid-js/store";
 import type { EncoderName } from "./options";
@@ -24,20 +24,20 @@ export type OutputQr = Readonly<{
 
 type Output =
   | {
-      text: string;
-      qr: {
-        version: number;
-        ecl: Ecl;
-        mask: Mask;
-        matrix: Uint8Array;
-      };
-      err: null;
-    }
-  | {
-      text: string;
-      qr: null;
-      err: FuqrError;
+    text: string;
+    qr: {
+      version: number;
+      ecl: Ecl;
+      mask: Mask;
+      matrix: Uint8Array;
     };
+    err: null;
+  }
+  | {
+    text: string;
+    qr: null;
+    err: FuqrError;
+  };
 
 export const QrContext = createContext<{
   inputQr: InputQr;
@@ -82,7 +82,7 @@ export function QrContextProvider(props: { children: JSX.Element }) {
           encoder = new AlphanumericEncoder(inputQr.text);
           break;
         default:
-          encoder = new MixedEncoder(inputQr.text);
+          encoder = new ByteEncoder(inputQr.text);
       }
       const qr = generateWithEncoder(encoder, {
         minVersion: inputQr.minVersion,
