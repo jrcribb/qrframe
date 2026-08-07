@@ -82,6 +82,7 @@ function Metadata(props: MetadataProps) {
   const { output } = useQrContext();
   return (
     <div class={props.class}>
+      <div class="text-sm pb-2 text-center">Alway try scanning your code, ideally in real conditions!</div>
       <Show when={!output().err}>
         <div class="font-bold text-sm pb-2">QR Metadata</div>
         <div class="grid grid-cols-2 gap-2 text-sm">

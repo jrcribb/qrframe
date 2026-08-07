@@ -54,8 +54,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       fuqr:
-        specifier: ^2.1.1
-        version: 2.1.1
+        specifier: ^2.2.0
+        version: 2.2.0
       lucide-solid:
         specifier: ^0.474.0
         version: 0.474.0(solid-js@1.9.14)
@@ -2007,8 +2007,8 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
-  fuqr@2.1.1:
-    resolution: {integrity: sha512-F0pg6CuQUGCviEZBTkvU94hsbNkQo/LQd7UN00oOzTaqCMZWqjuQtHuk5uxsAcAx/QyVJHcD06ieUMRmwUVnhw==}
+  fuqr@2.2.0:
+    resolution: {integrity: sha512-ObVfTHR+vSHnT42WoRvQun16BWWljPpzHVdYZaMCWdRESbPWnkO/UT97YQKeirqFzNVe1zvTYe2IOE+mQm247Q==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -5035,7 +5035,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  fuqr@2.1.1: {}
+  fuqr@2.2.0: {}
 
   gensync@1.0.0-beta.2: {}
 

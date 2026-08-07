@@ -1,5 +1,5 @@
 import { ByteEncoder, FuqrError, Mask, generateWithEncoder, type Ecl } from "fuqr";
-import { AlphanumericEncoder, NumericEncoder } from "fuqr/extras/encoders";
+import { AlphanumericEncoder, MixedEncoder, NumericEncoder } from "fuqr/extras/encoders";
 import { createContext, createMemo, useContext, type Accessor, type JSX } from "solid-js";
 import { createStore, type SetStoreFunction } from "solid-js/store";
 import type { EncoderName } from "./options";
@@ -52,7 +52,7 @@ export function QrContextProvider(props: { children: JSX.Element }) {
     exactVersion: false,
     minEcl: 0,
     exactEcl: false,
-    encoder: "Optimizing",
+    encoder: "Byte",
     mask: 2,
   });
 
@@ -63,23 +63,14 @@ export function QrContextProvider(props: { children: JSX.Element }) {
         case "Byte":
           encoder = new ByteEncoder(inputQr.text);
           break;
+        case "Alphanumeric":
+          encoder = new AlphanumericEncoder(inputQr.text);
+          break;
         case "Numeric":
-          for (let i = 0; i < inputQr.text.length; i++) {
-            const byte = inputQr.text.charCodeAt(i);
-            if (byte < 0x30 || 0x39 < byte) {
-              throw new FuqrError("INVALID_ENCODING", `Content is not numeric`);
-            }
-          }
           encoder = new NumericEncoder(inputQr.text);
           break;
-        case "Alphanumeric":
-          for (let i = 0; i < inputQr.text.length; i++) {
-            const byte = inputQr.text.charCodeAt(i);
-            if (AlphanumericEncoder.byteToB45(byte) === 255) {
-              throw new FuqrError("INVALID_ENCODING", `Content is not alphanumeric`);
-            }
-          }
-          encoder = new AlphanumericEncoder(inputQr.text);
+        case "Multi-segment":
+          encoder = new MixedEncoder(inputQr.text);
           break;
         default:
           encoder = new ByteEncoder(inputQr.text);
