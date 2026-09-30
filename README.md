@@ -112,7 +112,7 @@ This project is a tool to create designs! These are only examples!
 ### Customize data
 
 - encoder, version, error tolerance, mask pattern
-- powered by [`fuqr`](https://github.com/zhengkyl/fuqr), my small and hackable qr code generator
+- powered by [`furious-qr`](https://github.com/zhengkyl/furious-qr), my small and hackable qr code generator
 
 ### Customize appearance
 

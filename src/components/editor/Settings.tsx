@@ -1,4 +1,4 @@
-import type { Ecl, Mask } from "fuqr";
+import type { Ecl, Mask } from "furious-qr";
 import { useQrContext } from "~/lib/QrContext";
 import { ENCODER_NAMES, type EncoderName } from "~/lib/options";
 import { ButtonGroup, ButtonGroupItem } from "../ButtonGroup";

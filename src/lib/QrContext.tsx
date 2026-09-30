@@ -1,5 +1,5 @@
-import { ByteEncoder, FuqrError, Mask, generateWithEncoder, type Ecl } from "fuqr";
-import { AlphanumericEncoder, MixedEncoder, NumericEncoder } from "fuqr/extras/encoders";
+import { ByteEncoder, FuriousQrError, Mask, generateWithEncoder, type Ecl } from "furious-qr";
+import { AlphanumericEncoder, MixedEncoder, NumericEncoder } from "furious-qr/extras/encoders";
 import { createContext, createMemo, useContext, type Accessor, type JSX } from "solid-js";
 import { createStore, type SetStoreFunction } from "solid-js/store";
 import type { EncoderName } from "./options";
@@ -36,7 +36,7 @@ type Output =
   | {
     text: string;
     qr: null;
-    err: FuqrError;
+    err: FuriousQrError;
   };
 
 export const QrContext = createContext<{
@@ -91,7 +91,7 @@ export function QrContextProvider(props: { children: JSX.Element }) {
       return {
         text: inputQr.text,
         qr: null,
-        err: e as FuqrError,
+        err: e as FuriousQrError,
       };
     }
   });
